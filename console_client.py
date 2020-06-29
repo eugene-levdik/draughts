@@ -1,35 +1,13 @@
 from draughts_client import DraughtsClient
-from draughts_terms import Color
-# from draughts_server import DraughtsBoard
+from console_board_printer import print_to_console
 
 
 class DraughtsConsoleClient(DraughtsClient):
 
-    def ask_for_move(self, pieces):
-        board = []
-        for i in range(8):
-            line = []
-            for j in range(8):
-                line.append('□' if (i + j) % 2 == 0 else '■')
-            board.append(line)
-        for piece in pieces:
-            board[piece.x][piece.y] = piece.__repr__()
-
+    def ask_for_move(self, board):
         print('Player ' + str(self.color.value) + ', what is your move?')
-        if self.color == Color.WHITE:
-            for y in range(8):
-                print(8 - y, sep='', end=' ')
-                for x in range(8):
-                    print(board[x][7 - y], sep='', end=' ')
-                print()
-            print('  A  B C  D  E F  G H')
-        else:
-            for y in range(8):
-                print(y + 1, sep='', end=' ')
-                for x in range(8):
-                    print(board[7 - x][y], sep='', end=' ')
-                print()
-            print('  H  G F  E  D C  B A')
+
+        print_to_console(self.color, board)
 
         while True:
             try:
@@ -47,9 +25,3 @@ class DraughtsConsoleClient(DraughtsClient):
 
     def say(self, message):
         print(message)
-
-
-# if __name__ == '__main__':
-#     client = DraughtsConsoleClient(Color.BLACK)
-#     server = DraughtsBoard()
-#     client.ask_for_move(server.pieces)

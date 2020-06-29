@@ -1,33 +1,31 @@
-from draughts_server import DraughtsBoard
+from server import DraughtsServer
+from piece import Color
 from console_client import DraughtsConsoleClient
-from draughts_terms import Color, GameState
+from log_client import LogClient
 
 
 if __name__ == '__main__':
-    server = DraughtsBoard()
-    white_player = DraughtsConsoleClient(Color.WHITE)
-    black_player = DraughtsConsoleClient(Color.BLACK)
+    server = DraughtsServer()
+    # white_player = DraughtsConsoleClient(Color.WHITE)
+    # black_player = DraughtsConsoleClient(Color.BLACK)
 
-    while True:
-        if server.state == GameState.WHITE_MOVE:
+    white_player = LogClient(Color.BLACK)
+    black_player = white_player
+
+    while not server.game_over:
+        if server.active_player_color == Color.WHITE:
             player = white_player
-        elif server.state == GameState.BLACK_MOVE:
-            player = black_player
         else:
-            break
+            player = black_player
         while True:
             try:
-                x1, y1, x2, y2 = player.ask_for_move(server.pieces)
-                server.move(x1, y1, x2, y2)
+                x1, y1, x2, y2 = player.ask_for_move(server.board)
+                server.move((x1, y1), (x2, y2))
                 break
-            except DraughtsBoard.WrongMoveError as e:
+            except DraughtsServer.WrongMoveError as e:
                 player.say('\033[93m' + e.message + '\033[0m')
 
-    if server.state == GameState.DRAW:
-        white_player.say('The game ended in a draw.')
-        exit()
-
-    if server.state == GameState.WHITE_WON:
+    if server.winner == Color.WHITE:
         winner = white_player
         looser = black_player
     else:

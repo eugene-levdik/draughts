@@ -1,28 +1,22 @@
-from draughts_terms import Color
+from enum import Enum
+
+
+class Color(Enum):
+    EMPTY = 0
+    WHITE = 1
+    BLACK = 2
 
 
 class Piece:
 
-    def __init__(self, x, y, color):
-        self.is_king = False
-        self.x, self.y = x, y
+    def __init__(self, color):
         self.color = color
-
-    def move(self, x, y):
-        self.x, self.y = x, y
-        if self.color == Color.WHITE and y == 7:
-            self.is_king = True
-        if self.color == Color.BLACK and y == 0:
-            self.is_king = True
+        self.is_king = False
+        self.killed = False
 
     def __repr__(self):
         if self.color == Color.WHITE:
-            return '⛁' if self.is_king else '⛀'
-        return '⛃' if self.is_king else '⛂'
-
-
-if __name__ == '__main__':
-    piece = Piece(0, 0, Color.WHITE)
-    print(piece)
-    piece.move(1, 7)
-    print(piece)
+            return '\033[94m⛁\033[0m' if self.is_king else '\033[94m⛀\033[0m'
+        if self.color == Color.BLACK:
+            return '\033[91m⛃\033[0m' if self.is_king else '\033[91m⛂\033[0m'
+        return ' '
