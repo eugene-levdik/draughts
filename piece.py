@@ -19,4 +19,4 @@ class Piece:
             return '\033[94m⛁\033[0m' if self.is_king else '\033[94m⛀\033[0m'
         if self.color == Color.BLACK:
             return '\033[91m⛃\033[0m' if self.is_king else '\033[91m⛂\033[0m'
-        return ' '
+        return ''

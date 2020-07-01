@@ -120,7 +120,7 @@ class DraughtsServer:
                 else:
                     black_counter += 1
         if white_counter == 0:
-            return Color.WHITE
+            return Color.BLACK
         if black_counter == 0:
             return Color.WHITE
         return None
@@ -179,8 +179,8 @@ class DraughtsServer:
         if piece_to_move.color == Color.BLACK and y2 == 0:
             piece_to_move.is_king = True
 
-        winner = self.__check_winner__()
-        if winner is not None:
+        self.winner = self.__check_winner__()
+        if self.winner is not None:
             self.game_over = True
             self.active_player_color = None
             return
