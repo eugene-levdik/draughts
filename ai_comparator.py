@@ -1,13 +1,13 @@
 from server import DraughtsServer
 from piece import Color
 from clients.furthest_ai_client import FurthestDraughtsClient
-import time
 from clients.closest_ai_client import ClosestDraughtsClient
+import time
 
 
 if __name__ == '__main__':
-    closest = ClosestDraughtsClient()
-    furthest = FurthestDraughtsClient()
+    closest_wins = 0
+    furthest_wins = 0
     n = 100
     for i in range(n):
         print(round(100 * i / n), '%')
@@ -15,11 +15,11 @@ if __name__ == '__main__':
         moves = 0
         start = time.time()
         if i % 2 == 0:
-            white_player = closest
-            black_player = furthest
+            white_player = ClosestDraughtsClient(Color.WHITE)
+            black_player = FurthestDraughtsClient(Color.BLACK)
         else:
-            white_player = furthest
-            black_player = closest
+            white_player = FurthestDraughtsClient(Color.WHITE)
+            black_player = ClosestDraughtsClient(Color.BLACK)
         while not server.game_over:
             if server.active_player_color == Color.WHITE:
                 player = white_player
@@ -30,7 +30,7 @@ if __name__ == '__main__':
                     moves = 1e6
                     break
                 try:
-                    x1, y1, x2, y2 = player.ask_for_move(server.board, server.active_player_color)
+                    x1, y1, x2, y2 = player.ask_for_move(server.board)
                     server.move((x1, y1), (x2, y2))
                     break
                 except DraughtsServer.WrongMoveError:
@@ -40,10 +40,10 @@ if __name__ == '__main__':
                 print('Interrupting game while', player, 'move')
                 break
 
-        if server.winner == Color.WHITE:
-            white_player.wins += 1
-        elif server.winner == Color.BLACK:
-            black_player.wins += 1
+        if (i % 2 == 0 and server.winner == Color.WHITE) or (i % 2 == 1 and server.winner == Color.BLACK):
+            closest_wins += 1
+        elif (i % 2 == 1 and server.winner == Color.WHITE) or (i % 2 == 0 and server.winner == Color.BLACK):
+            furthest_wins += 1
 
-    print(closest, 'won', closest.wins, 'games')
-    print(furthest, 'won', furthest.wins, 'games')
+    print('Closest AI won', closest_wins, 'games')
+    print('Furthest AI won', furthest_wins, 'games')

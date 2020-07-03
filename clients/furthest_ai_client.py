@@ -1,4 +1,4 @@
-from clients.draughts_client import DraughtsAIClient
+from clients.draughts_client import DraughtsClient
 import random as r
 from piece import Color
 
@@ -16,10 +16,7 @@ def gen_y(color):
     return y
 
 
-class FurthestDraughtsClient(DraughtsAIClient):
+class FurthestDraughtsClient(DraughtsClient):
 
-    def ask_for_move(self, board, color):
-        return gen_x(), gen_y(color), gen_x(), gen_y(color)
-
-    def __repr__(self):
-        return 'Furthest AI'
+    def ask_for_move(self, board):
+        return gen_x(), gen_y(self.color), gen_x(), gen_y(self.color)
