@@ -1,8 +1,8 @@
 from server import DraughtsServer
 from piece import Color
-from clients.furthest_ai_client import FurthestDraughtsClient
-from clients.closest_ai_client import ClosestDraughtsClient
 import time
+from clients.smart_ai_closest import ClosestSmartClient
+from clients.smart_ai_furthest import FurthestSmartClient
 
 
 if __name__ == '__main__':
@@ -15,11 +15,11 @@ if __name__ == '__main__':
         moves = 0
         start = time.time()
         if i % 2 == 0:
-            white_player = ClosestDraughtsClient(Color.WHITE)
-            black_player = FurthestDraughtsClient(Color.BLACK)
+            white_player = ClosestSmartClient(Color.WHITE)
+            black_player = FurthestSmartClient(Color.BLACK)
         else:
-            white_player = FurthestDraughtsClient(Color.WHITE)
-            black_player = ClosestDraughtsClient(Color.BLACK)
+            white_player = FurthestSmartClient(Color.WHITE)
+            black_player = ClosestSmartClient(Color.BLACK)
         while not server.game_over:
             if server.active_player_color == Color.WHITE:
                 player = white_player

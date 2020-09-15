@@ -8,3 +8,6 @@ class DraughtsClient:
 
     def say(self, message):
         pass
+
+    def is_human(self):
+        pass

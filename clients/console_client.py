@@ -25,3 +25,6 @@ class DraughtsConsoleClient(DraughtsClient):
 
     def say(self, message):
         print(message)
+
+    def is_human(self):
+        return True

@@ -1,11 +1,13 @@
 from server import DraughtsServer
 from piece import Color
 from clients.console_client import DraughtsConsoleClient
+from clients.smart_ai_closest import ClosestSmartClient
+import time
 
 
 if __name__ == '__main__':
     server = DraughtsServer()
-    white_player = DraughtsConsoleClient(Color.WHITE)
+    white_player = ClosestSmartClient(Color.WHITE)
     black_player = DraughtsConsoleClient(Color.BLACK)
 
     while not server.game_over:
@@ -13,9 +15,16 @@ if __name__ == '__main__':
             player = white_player
         else:
             player = black_player
+        start = time.time()
         while True:
+            if not player.is_human() and time.time() - start > 1:
+                if server.active_player_color == Color.WHITE:
+                    black_player.say('Opponent gave up. You won!')
+                else:
+                    white_player.say('Opponent gave up. You won!')
+                exit()
+            x1, y1, x2, y2 = player.ask_for_move(server.board)
             try:
-                x1, y1, x2, y2 = player.ask_for_move(server.board)
                 server.move((x1, y1), (x2, y2))
                 break
             except DraughtsServer.WrongMoveError as e:

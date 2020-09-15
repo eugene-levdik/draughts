@@ -1,5 +1,4 @@
 from builtins import range
-
 from piece import Color, Piece
 
 
